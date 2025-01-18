@@ -1,0 +1,30 @@
+<!-- Start of _includes/head/custom.html -->
+<!-- Load MathJax -->
+<script>
+  MathJax = {
+    tex: {
+      inlineMath: [['$', '$'], ['\\(', '\\)']],
+      displayMath: [['$$', '$$'], ['\\[', '\\]']],
+      processEscapes: true,
+      processEnvironments: true
+    },
+    options: {
+      skipHtmlTags: ['script', 'noscript', 'style', 'textarea', 'pre']
+    }
+  };
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.2/es5/tex-chtml.min.js" id="MathJax-script" async></script>
+
+<!-- Optional: Add custom CSS for MathJax styling -->
+<style>
+  .MathJax {
+    overflow-x: auto;
+    overflow-y: hidden;
+    max-width: 100%;
+  }
+  
+  .math-display {
+    margin: 1em 0;
+  }
+</style>
+<!-- End of _includes/head/custom.html -->
