@@ -59,7 +59,7 @@ plugins:
 author:
   name   : "Steven Saito"
   avatar : "/assets/images/bio-photo.jpg"
-  bio    : "Student of ML and robotics."
+  bio    : "Messing around with ML and robotics 😋"
   links:
     - label: "Website"
       icon: "fas fa-fw fa-link"
@@ -105,6 +105,15 @@ defaults:
     values:
       layout: single
       author_profile: true
+  # _notes
+  - scope:
+      path: ""
+      type: notes
+    values:
+      layout: single
+      author_profile: false
+      share: true
+      mathjax: true
 
 category_archive:
   type: liquid
@@ -112,3 +121,12 @@ category_archive:
 tag_archive:
   type: liquid
   path: /tags/
+
+collections:
+  notes:
+    output: true
+    permalink: /:collection/:path/
+  projects:
+    output: true
+    permalink: /:collection/:path/
+
