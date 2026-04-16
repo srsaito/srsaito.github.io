@@ -1,5 +1,6 @@
 ---
 title: "Ch 2 Notes and Exercises"
+permalink: /notes/sb_ch2/
 ---
 
 Bandit problem is like life, each day. You pull the lever, what are you going to do today? Do what worked well before, or try something new?
