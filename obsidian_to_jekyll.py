@@ -114,6 +114,29 @@ def convert_wikilinks(text, warnings):
     return re.sub(r'\[\[([^\]]+)\]\]', replace, text)
 
 
+def ensure_blank_lines_around_tables(text):
+    """
+    Kramdown requires a blank line before a table to recognize it as a table block.
+    Without it, a table immediately after a heading or paragraph is rendered as <p>.
+    """
+    lines = text.split('\n')
+    result = []
+    for i, line in enumerate(lines):
+        stripped = line.strip()
+        # Detect a table row (starts with |)
+        if stripped.startswith('|'):
+            prev = result[-1] if result else ''
+            if prev.strip():
+                result.append('')
+        result.append(line)
+        # Ensure blank line after table (when next line is not a table row)
+        if stripped.startswith('|'):
+            next_line = lines[i + 1] if i + 1 < len(lines) else ''
+            if next_line.strip() and not next_line.strip().startswith('|'):
+                result.append('')
+    return '\n'.join(result)
+
+
 def strip_zotero_links(text):
     """[label](zotero://...)  →  label"""
     return re.sub(r'\[([^\]]*)\]\(zotero://[^)]*\)', r'\1', text)
@@ -304,6 +327,7 @@ def convert(text, title='Untitled'):
     text = convert_embedded_images(text, warnings)
     text = convert_wikilinks(text, warnings)
     text = strip_zotero_links(text)
+    text = ensure_blank_lines_around_tables(text)
     text = convert_inline_math_delimiters(text)
     text = fix_display_math(text, warnings)
 
