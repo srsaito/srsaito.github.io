@@ -61,30 +61,21 @@ author:
   avatar : "/assets/images/bio-photo.jpg"
   bio    : "Messing around with ML and robotics 😋"
   links:
-    - label: "Website"
-      icon: "fas fa-fw fa-link"
-      url: "https://"
     - label: "Twitter"
       icon: "fab fa-fw fa-twitter-square"
-      url: "https://twitter.com/"
+      url: "https://x.com/ssaito"
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
       url: "https://github.com/srsaito"
-    - label: "Instagram"
-      icon: "fab fa-fw fa-instagram"
-      url: "https://instagram.com/"
 
 footer:
   links:
     - label: "Twitter"
       icon: "fab fa-fw fa-twitter-square"
-      url: "https://twitter.com/"
+      url: "https://x.com/ssaito"
     - label: "GitHub"
       icon: "fab fa-fw fa-github"
       url: "https://github.com/srsaito"
-    - label: "Instagram"
-      icon: "fab fa-fw fa-instagram"
-      url: "https://instagram.com/"
 
 defaults:
   # _posts
