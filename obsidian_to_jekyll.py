@@ -163,6 +163,11 @@ def convert_inline_math_delimiters(text):
                 # This fixes e.g. \bar{o}_{n} where } precedes _ triggering
                 # kramdown's left-flanking emphasis rule.
                 inner = inner.replace('}_', '}\\_')
+                # Replace bare | with \mid so kramdown doesn't treat it as a
+                # table column separator (e.g. E[R_t|A_t] would split lines
+                # into table cells, breaking the surrounding \\(\\) delimiters).
+                # \mid renders identically in probability/conditional notation.
+                inner = re.sub(r'(?<!\\)\|', r'\\mid ', inner)
                 # Use \\( ... \\) in the markdown file.
                 # kramdown renders  \\(  →  \(  in HTML, which MathJax processes.
                 # Plain  \(  is eaten by kramdown as an escaped parenthesis.
