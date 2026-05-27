@@ -6,14 +6,16 @@ Converts an Obsidian Markdown note to Jekyll (Minimal Mistakes) compatible Markd
 
 Transformations applied automatically:
   1. Adds YAML frontmatter (title from filename) if missing
-  2. Converts Obsidian callouts  >[!type]  to plain blockquotes
-  3. Converts embedded images  ![[file.png]]  to  ![](_resources/file.png)
-  4. Converts wikilinks: [[note|alias]] → alias, [[#Heading]] → [Heading](#anchor),
+  2. Normalizes frontmatter: splits 'Category/Sub' on '/' → category + tag,
+     lowercases and hyphenates all category/tag values
+  3. Converts Obsidian callouts  >[!type]  to plain blockquotes
+  4. Converts embedded images  ![[file.png]]  to  ![](_resources/file.png)
+  5. Converts wikilinks: [[note|alias]] → alias, [[#Heading]] → [Heading](#anchor),
      [[note]] → note text (with warning)
-  5. Strips zotero:// links, keeping the label text
-  6. Converts inline  $...$  to  \(...\)  so kramdown doesn't mangle _ and * inside math
-  7. Ensures blank lines before and after display math $$ blocks
-  8. Splits $$formula$$ that is glued to end of a text/list line
+  6. Strips zotero:// links, keeping the label text
+  7. Converts inline  $...$  to  \(...\)  so kramdown doesn't mangle _ and * inside math
+  8. Ensures blank lines before and after display math $$ blocks
+  9. Splits $$formula$$ that is glued to end of a text/list line
 
 Items flagged for manual review (marked with # REVIEW in output):
   - $$ block opening embedded mid-line (e.g. inside a blockquote)
@@ -312,6 +314,106 @@ def fix_display_math(text, warnings):
     return '\n'.join(result)
 
 
+def normalize_frontmatter(text, warnings):
+    """Normalize Obsidian-style frontmatter for Jekyll compatibility.
+
+    Splits category paths on '/':
+      - First segment → lowercased, hyphenated category
+      - Remaining segments → appended to 'tags' list
+    Also slugifies all tag values (lowercase, spaces to hyphens).
+    """
+    if not text.lstrip().startswith('---'):
+        return text
+
+    fm_end = text.find('\n---', 4)
+    if fm_end == -1:
+        return text
+
+    after_close = text.find('\n', fm_end + 1)
+    body = text[after_close + 1:] if after_close != -1 else ''
+    fm_content = text[4:fm_end]
+
+    def slugify(s):
+        return re.sub(r'\s+', '-', s.strip().lower())
+
+    lines = fm_content.split('\n')
+    out = []
+    extra_tags = []
+    existing_tags = []
+    in_cats = False
+    in_tags = False
+    tags_header_idx = None
+
+    for line in lines:
+        stripped = line.strip()
+
+        if not stripped:
+            out.append(line)
+            continue
+
+        # Top-level YAML key (not indented)
+        if not line[0].isspace():
+            key_m = re.match(r'^([\w][\w ]*):\s*(.*)', line)
+            if key_m:
+                key = key_m.group(1).strip()
+                inline_val = key_m.group(2).strip()
+
+                if key == 'categories':
+                    in_cats, in_tags = True, False
+                    if inline_val.startswith('[') and inline_val.endswith(']'):
+                        items = [v.strip().strip('"\'') for v in inline_val[1:-1].split(',') if v.strip()]
+                        new_cats = []
+                        for item in items:
+                            parts = [slugify(p) for p in item.split('/')]
+                            new_cats.append(parts[0])
+                            extra_tags.extend(parts[1:])
+                        out.append(f'categories: [{", ".join(new_cats)}]')
+                        in_cats = False
+                    else:
+                        out.append(line)
+                    continue
+
+                if key == 'tags':
+                    in_cats, in_tags = False, True
+                    tags_header_idx = len(out)
+                    if inline_val.startswith('[') and inline_val.endswith(']'):
+                        items = [v.strip().strip('"\'') for v in inline_val[1:-1].split(',') if v.strip()]
+                        existing_tags.extend(slugify(v) for v in items)
+                        in_tags = False
+                    out.append('tags:')
+                    continue
+
+                in_cats, in_tags = False, False
+
+        # List item under categories or tags
+        if stripped.startswith('-') and (in_cats or in_tags):
+            val = stripped[1:].strip().strip('"\'')
+            if in_cats:
+                parts = [slugify(p) for p in val.split('/')]
+                out.append(f'  - {parts[0]}')
+                extra_tags.extend(parts[1:])
+            else:
+                existing_tags.append(slugify(val))
+            continue
+
+        out.append(line)
+
+    # Rebuild tags section with merged values
+    all_tags = existing_tags + extra_tags
+    if tags_header_idx is not None:
+        tag_items = [f'  - {t}' for t in all_tags]
+        out = out[:tags_header_idx + 1] + tag_items + out[tags_header_idx + 1:]
+    elif extra_tags:
+        out.append('tags:')
+        out.extend(f'  - {t}' for t in extra_tags)
+
+    if extra_tags:
+        warnings.append(f"Category sub-path(s) moved to tags: {extra_tags}")
+
+    fm_out = '\n'.join(out)
+    return f'---\n{fm_out}\n---\n{body}'
+
+
 # ---------------------------------------------------------------------------
 # Main conversion pipeline
 # ---------------------------------------------------------------------------
@@ -323,6 +425,7 @@ def convert(text, title='Untitled'):
     text, code_blocks = protect_code_blocks(text)
 
     text = add_frontmatter(text, title)
+    text = normalize_frontmatter(text, warnings)
     text = convert_callouts(text)
     text = convert_embedded_images(text, warnings)
     text = convert_wikilinks(text, warnings)
