@@ -6,8 +6,8 @@ permalink: /notes/mle_notes/
 
 These notes are from MIT's 18.05 Open Courseware, copy embedded below since MIT often shifts around their website so links are unstable.
 
-Probability *density* function → $P(c≤X≤d)=\int_{c}^{d}f(x)dx$ 
-Probability *mass* function → $p(a)=P(X=a)$
+Probability *density* function → \\(P(c≤X≤d)=\int_{c}^{d}f(x)dx\\) 
+Probability *mass* function → \\(p(a)=P(X=a)\\)
 
 "Why do we use the terms mass and density to describe the pmf and pdf? What is the difference between the two? The simple answer is that these terms are completely analogous to the mass and density you saw in physics and calculus." Mass as a sum of discrete points of mass or an integral of a density function. Also, "for both discrete and continuous random varialbes, the expected value is simply the center of mass or balance point."
 
@@ -19,19 +19,19 @@ Discrete Random Variables
 
 ## ROC Receiver Operator Characteristic
 
-The ROC is a graph that shows the trade off of true positive rate (TPR=TP/P) and false positive rate (FPR=FP/N), where the y-axis is TPR and x-axis is FPR, and the curve is traversed as a function of the discrimination threshold (the value above which the sample x is considered P, or positive). So as the discrimination threshold approaches 1 the curve goes to the upper right where TPR = 1 and FPR = 1. A different way to visualize this trade off is on a probability distribution graph showing the $p(X=x \mid Y=0)$ and $p(X=x \mid Y=1)$ probability density functions, below. TPR is the CDF of $p(X=x \mid Y=1)$ where x>discrimination threshold, and FPR is that of $p(X=x \mid Y=0)$.
+The ROC is a graph that shows the trade off of true positive rate (TPR=TP/P) and false positive rate (FPR=FP/N), where the y-axis is TPR and x-axis is FPR, and the curve is traversed as a function of the discrimination threshold (the value above which the sample x is considered P, or positive). So as the discrimination threshold approaches 1 the curve goes to the upper right where TPR = 1 and FPR = 1. A different way to visualize this trade off is on a probability distribution graph showing the \\(p(X=x \mid Y=0)\\) and \\(p(X=x \mid Y=1)\\) probability density functions, below. TPR is the CDF of \\(p(X=x \mid Y=1)\\) where x>discrimination threshold, and FPR is that of \\(p(X=x \mid Y=0)\\).
 
 ![ROC Probability Distribution Visualization](Image%2020240708%20085807.jpeg)
 
 ## Product rule and summation rule for probability
 
-That then got me thinking about Bayes theorem, which led to a refresher on the summation rule and product rule of probability. I've found both are intuitively understood using Bishop's illustration showing the values of two random variables, X, which takes the values $x_i$ and $Y$, which takes the values $y_j$, and then considering the points in column $i$, corresponding to $X = x_i$, is denoted by $c_i$.
+That then got me thinking about Bayes theorem, which led to a refresher on the summation rule and product rule of probability. I've found both are intuitively understood using Bishop's illustration showing the values of two random variables, X, which takes the values \\(x_i\\) and \\(Y\\), which takes the values \\(y_j\\), and then considering the points in column \\(i\\), corresponding to \\(X = x_i\\), is denoted by \\(c_i\\).
 ![Bishop's probability illustration](image.png)
 ### Summation Rule
-The summation rule is that $p(X=x_i)=\sum_{j=1}^Lp(X=x_i,Y =y_j)$. Bishop notes "Note that $p(X = x_i)$ is sometimes called the marginal probability, because it is obtained by marginalizing, or summing out, the other variables (in this case $Y$ )."
+The summation rule is that \\(p(X=x_i)=\sum_{j=1}^Lp(X=x_i,Y =y_j)\\). Bishop notes "Note that \\(p(X = x_i)\\) is sometimes called the marginal probability, because it is obtained by marginalizing, or summing out, the other variables (in this case \\(Y\\) )."
 
 ### Product Rule
-From that we define conditional probability, $p(Y = y_j \mid X = x_i) = n_{ij}/c_i$. And from that we have $p(X=x_i,Y=y_j) = n_{ij}/N = n_{ij}/c_i · c_i/N = p(Y = y_j \mid X = x_i)p(X = x_i)$, which is the product rule.
+From that we define conditional probability, \\(p(Y = y_j \mid X = x_i) = n_{ij}/c_i\\). And from that we have \\(p(X=x_i,Y=y_j) = n_{ij}/N = n_{ij}/c_i · c_i/N = p(Y = y_j \mid X = x_i)p(X = x_i)\\), which is the product rule.
 And Bayes Theorem comes from applying the symmetry rule p(X, Y ) = p(Y, X) to the product rule:
 
 $$p(Y \mid X) = \frac{p(X \mid Y)p(Y)}{p(X)}$$
@@ -44,7 +44,7 @@ or in words, **posterior ∝ likelihood × prior**.
 
 ## Likelihood function is not a probability density function
 
-I finally understand why the integral over w of $P(D \mid w)$, the likelihood function, won't necessarily be 1. Bishop says $p(D \mid w)$, the likelihood function, "expresses how probable the observed data set is for different settings of the parameter vector w. Note that the likelihood is not a probability distribution over w, and its integral with respect to w does not (necessarily) equal one. "
+I finally understand why the integral over w of \\(P(D \mid w)\\), the likelihood function, won't necessarily be 1. Bishop says \\(p(D \mid w)\\), the likelihood function, "expresses how probable the observed data set is for different settings of the parameter vector w. Note that the likelihood is not a probability distribution over w, and its integral with respect to w does not (necessarily) equal one. "
 Claude explained "the likelihood function is not a probability distribution over w because it's not describing the probability of w occurring. Instead, it's describing how well each possible value of w explains the observed data D." In simpler terms, the typical conditional probability example in textbooks assumes w is a fixed condition, so that the conditional probabilities D integrated over fixed condition w equals 1. However for this application, D is fixed and w can vary (this question is Bishop's fruit example, fruit picked was D=Apple, so which box did the apple come from - what was the prior that most likely resulted in apple being picked). So in the textbook example case, for any particular w (set of model parameters), the integral of samples D over that w is 1. But in the reverse case where the prior is the model parameters w, w is no longer fixed, so integrating over w will not necessarily be 1.
 
 This is a subtle but crucial distinction in probability theory and statistics - ==likelihood functions measure the plausibility of parameters given fixed data, while probability distributions measure the likelihood of data given fixed parameters.==
@@ -69,31 +69,31 @@ Generative Deep Learning (GDL) had a nice toy example below of a parameter-based
 
 Below, the author reveals the true underlying data in grey, pdata, a uniform distribution over the land mass of the world.
 ![True underlying data distribution](image.4.png)
-Point A is an observation that is generated by our model but does not appear to have been generated by $p_{data}$ as it’s in the middle of the sea.
+Point A is an observation that is generated by our model but does not appear to have been generated by \\(p_{data}\\) as it’s in the middle of the sea.
 
-Point B could never have been generated by $p_{model}$ as it sits outside the orange box. Therefore, our model has some gaps in its ability to produce observations across the entire range of potential possibilities.
+Point B could never have been generated by \\(p_{model}\\) as it sits outside the orange box. Therefore, our model has some gaps in its ability to produce observations across the entire range of potential possibilities.
 
-Point C is an observation that could be generated by and also by $p_{data}$.
+Point C is an observation that could be generated by and also by \\(p_{data}\\).
 
-Since it is a parametric model, it represents a family of density functions $p_𝛳(x)$ that is described with an infinite number of parameters, 𝛳. In the example above, the map is uniquely represented by the four border positions, 𝛳=(𝛳1,𝛳2,𝛳3,𝛳4).
+Since it is a parametric model, it represents a family of density functions \\(p_𝛳(x)\\) that is described with an infinite number of parameters, 𝛳. In the example above, the map is uniquely represented by the four border positions, 𝛳=(𝛳1,𝛳2,𝛳3,𝛳4).
 
 ## Bayesian vs Frequentist consideration of Likelihood Function
 
->In both the Bayesian and frequentist paradigms, the likelihood function $p(D \mid w)$ plays a central role. However, the manner in which it is used is fundamentally different in the two approaches.
+>In both the Bayesian and frequentist paradigms, the likelihood function \\(p(D \mid w)\\) plays a central role. However, the manner in which it is used is fundamentally different in the two approaches.
 >
->In a Frequentist setting, $w$ is considered to be a fixed parameter, whose value is determined by some form of 'estimator', and error bars on this estimate are obtained by considering the distribution of possible data sets $D$.
+>In a Frequentist setting, \\(w\\) is considered to be a fixed parameter, whose value is determined by some form of 'estimator', and error bars on this estimate are obtained by considering the distribution of possible data sets \\(D\\).
 >
->By contrast, from the Bayesian viewpoint there is only a single data set $D$ (namely the one that is actually observed), and the uncertainty in the parameters is expressed through a probability distribution over $w$.
+>By contrast, from the Bayesian viewpoint there is only a single data set \\(D\\) (namely the one that is actually observed), and the uncertainty in the parameters is expressed through a probability distribution over \\(w\\).
 
 \- Bishop, PRML
 
-Frequentists would use MLE to find the parameters, $w$, that maximize the likelihood function.
+Frequentists would use MLE to find the parameters, \\(w\\), that maximize the likelihood function.
 
-Bayesian uses Bayes Theorem to combine the likelihood function with a prior to get a posterior probability function for the parameters, $w$.
+Bayesian uses Bayes Theorem to combine the likelihood function with a prior to get a posterior probability function for the parameters, \\(w\\).
  
 ## Likelihood Estimation 
 
-For training for next token prediction for a decoder-only LLM, we want to find the parameters $\theta$ that maximize the probability for the correct token, conditioned on the previously generated tokens in the sequence. Suppose our vocabulary is the tokens ["please", "pass", "the", "salt", "pepper", "fork"]. Consider the training sequence "please pass the salt". There would be three training examples generated:
+For training for next token prediction for a decoder-only LLM, we want to find the parameters \\(\theta\\) that maximize the probability for the correct token, conditioned on the previously generated tokens in the sequence. Suppose our vocabulary is the tokens ["please", "pass", "the", "salt", "pepper", "fork"]. Consider the training sequence "please pass the salt". There would be three training examples generated:
 1. First, the model needs to predict "pass" given "please"
 2. Then predict "the" given "please pass"
 3. Then predict "salt" given "please pass the"
@@ -108,9 +108,9 @@ If "salt" was the actual next word in our training data, then our likelihood fun
 
 $$\mathscr{L}(\theta \mid x) = p_\theta (x)$$
 
-where $\theta$ are our model parameters and $x$ is our single observation, "salt". Again, keep in mind it is a function of $\theta$, not $x$, so it sums to 1 only over $x$, not over $\theta$.
+where \\(\theta\\) are our model parameters and \\(x\\) is our single observation, "salt". Again, keep in mind it is a function of \\(\theta\\), not \\(x\\), so it sums to 1 only over \\(x\\), not over \\(\theta\\).
 
-We have a set of observations (e.g., the entire sequence above), so we apply the model parameters $\theta$ to the entire sequence. Since if the parameters are correct for generating the correct probabilities, and our observations are the ground truth (the training set), then *all* of the observations must be true, so the likelihood estimator is the joint probability of the observed data (i.e., the data could not include Point B from the map toy example above). Referring to the map toy example above
+We have a set of observations (e.g., the entire sequence above), so we apply the model parameters \\(\theta\\) to the entire sequence. Since if the parameters are correct for generating the correct probabilities, and our observations are the ground truth (the training set), then *all* of the observations must be true, so the likelihood estimator is the joint probability of the observed data (i.e., the data could not include Point B from the map toy example above). Referring to the map toy example above
 
 >In the world map example, the MLE is the smallest rectangle that still contains all of the points in the training set.
 
@@ -120,11 +120,11 @@ Then the likelihood function formed from the joint probability is
 
 $$\mathscr{L}(\theta \mid X)=\prod_{x \in X}p_\theta(x) $$
 
-where $X$ the data set, the three training examples above.
+where \\(X\\) the data set, the three training examples above.
 
 ## Negative Log Likelihood
 
-Taking the $log_e$ of the likelihood estimator makes things easier.
+Taking the \\(log_e\\) of the likelihood estimator makes things easier.
 
 >In the machine learning literature, the negative log of the likelihood function is called an _error function_. Because the negative logarithm is a monotonically decreasing function, maximizing the likelihood is equivalent to minimizing the error.
 
@@ -134,13 +134,13 @@ Plus log turns the MLE product series into a computationally cheaper summation. 
 
 $$\mathscr{l}(\theta \mid X) = \sum_{x \in X}\log p_\theta(x)$$
 
-Again, given we've observed dataset $X$, then the value $\mathscr{l}(\theta \mid X)$ is the likelihood that we would see actually $X$ if the parameters $\theta$ parametrized the probability distribution used to generate that data.
+Again, given we've observed dataset \\(X\\), then the value \\(\mathscr{l}(\theta \mid X)\\) is the likelihood that we would see actually \\(X\\) if the parameters \\(\theta\\) parametrized the probability distribution used to generate that data.
 
-So if our LLM *currently* had parameters $\theta$ and we see that it generated the data set $X$, then the value $\mathscr{l}(\theta \mid X)$ would be high. If that data set is not what we want, then we should find different parameters with the true (or at least better) probability distribution that will generate the data we want.
+So if our LLM *currently* had parameters \\(\theta\\) and we see that it generated the data set \\(X\\), then the value \\(\mathscr{l}(\theta \mid X)\\) would be high. If that data set is not what we want, then we should find different parameters with the true (or at least better) probability distribution that will generate the data we want.
 
 ## Maximum Likelihood Estimation (MLE)
 
-Maximum Likelihood Estimation is a method that will let us find a $\hat{\theta}$ from all the possible $\theta$ that maximizes the likelihood function above. Specifically:
+Maximum Likelihood Estimation is a method that will let us find a \\(\hat{\theta}\\) from all the possible \\(\theta\\) that maximizes the likelihood function above. Specifically:
 
 $$\hat{\theta}=\underset{x}{\operatorname{argmax}} \mathscr{l}(\theta \mid X) $$
 
@@ -169,7 +169,7 @@ Loss = -[ log P("pass" | "please")
         + log P("dinner" | "please pass the salt for") ]
 ```
 
-Total Cross Entropy Loss would be accumulated for all the sequences in the batch, and then gradients would be computed and parameters, $\theta$, updated. 
+Total Cross Entropy Loss would be accumulated for all the sequences in the batch, and then gradients would be computed and parameters, \\(\theta\\), updated. 
 
 So Cross Entropy Loss and MLE are related by the following, for the sequence "please pass the": 
 ```python
