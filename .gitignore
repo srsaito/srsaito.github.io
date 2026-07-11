@@ -5,3 +5,10 @@ Gemfile.lock
 .DS_Store
 assets/.DS_Store
 _config.yml.save
+
+# Debug / tooling artifacts (not site content)
+.playwright-mcp/
+anki_audio_out/
+/*.png
+CLAUDE.local.md
+.claude/settings.local.json

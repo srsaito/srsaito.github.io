@@ -1,0 +1,20 @@
+{
+  "worktree": {
+    "bgIsolation": "none"
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR/.claude/hooks/mathlint.sh\"",
+            "timeout": 15,
+            "statusMessage": "math-lint: checking note for raw $...$ math"
+          }
+        ]
+      }
+    ]
+  }
+}
