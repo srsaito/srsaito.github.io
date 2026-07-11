@@ -14,6 +14,8 @@
 # You can create any custom variable you would like, and they will be accessible
 # in the templates via {{ site.myvariable }}.
 title: ssaito_notes
+url: "https://ssaito.net"   # canonical base URL (protocol + host, no trailing slash)
+baseurl: ""                 # site served at domain root
 email: ssaito@alum.mit.edu
 description: "Personal engineering notebook documenting robotics and machine learning studies, including textbook notes, research paper analyses, project reports, and conference insights. A resource for AI and robotics practitioners."
 twitter_username: ssaito
