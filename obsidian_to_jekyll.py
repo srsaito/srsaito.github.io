@@ -418,6 +418,11 @@ def normalize_frontmatter(text, warnings):
 # Main conversion pipeline
 # ---------------------------------------------------------------------------
 
+def convert_highlights(text):
+    """==highlighted text== -> **bold** (kramdown/Jekyll has no == highlight syntax)."""
+    return re.sub(r'==(?=\S)(.+?)(?<=\S)==', r'**\1**', text)
+
+
 def convert(text, title='Untitled'):
     warnings = []
 
@@ -427,6 +432,7 @@ def convert(text, title='Untitled'):
     text = add_frontmatter(text, title)
     text = normalize_frontmatter(text, warnings)
     text = convert_callouts(text)
+    text = convert_highlights(text)
     text = convert_embedded_images(text, warnings)
     text = convert_wikilinks(text, warnings)
     text = strip_zotero_links(text)
